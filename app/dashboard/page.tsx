@@ -1,27 +1,12 @@
 import JobBoard from "./components/JobBoard";
 import SearchBar from "./components/SearchBar";
 import Filters from "./components/Filters";
+import { getJobPosts } from "@/lib/job-posts";
 
-const jobs = [
-    {
-        id: 1,
-        title: "Reparar computadora lenta",
-        category: "PROGRAMMING",
-        location: "Vista Alegre",
-        price: 25,
-        description: "Necesito ayuda revisando una laptop que está muy lenta.",
-    },
-    {
-        id: 2,
-        title: "Limpiar patio pequeño",
-        category: "CLEANING",
-        location: "Arraiján",
-        price: 30,
-        description: "Busco alguien que pueda limpiar hojas y basura del patio.",
-    },
-];
+export default async function DashboardPage() {
 
-export default function DashboardPage() {
+    const jobs = await getJobPosts();
+
     return (
         <main>
             <h1>Tablón de ofertas</h1>
@@ -33,7 +18,7 @@ export default function DashboardPage() {
             </section>
 
             <section>
-                <JobBoard jobs={jobs} />
+                <JobBoard jobs = {jobs} />
             </section>
         </main>
     );

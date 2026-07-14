@@ -49,7 +49,7 @@ model JobPost {
   title       String
   description String
   category    Category
-  price       Float?
+  price       Float
   location    String
   contactInfo String
   status      JobStatus @default(OPEN)
