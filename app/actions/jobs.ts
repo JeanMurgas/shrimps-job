@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { Prisma } from "@/app/generated/prisma/client";
 import { createJobPost } from "@/lib/job-posts";
 
+//IMPORTS PARA DETAIL JOBS
+import { getJobPostById } from "@/lib/job-posts";
 
 
 export async function createJob(formData: FormData) {
@@ -28,4 +30,11 @@ export async function createJob(formData: FormData) {
 
     revalidatePath("/dashboard");
     redirect("/dashboard");
+}
+
+export async function getJobDetail(id: number) {
+
+    
+
+    return await getJobPostById(id);
 }
