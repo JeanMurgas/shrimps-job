@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getJobPostById } from "@/lib/job-posts";
+import { deleteJob } from "@/app/actions/jobs";
 
 interface JobDetailPageProps {
   params: Promise<{
@@ -39,6 +40,12 @@ export default async function JobDetailPage({
       <p>
         <strong>Contacto:</strong> {job.contactInfo}
       </p>
+
+      <form action={deleteJob.bind(null, job.id)}>
+        <button type="submit">
+          Eliminar oferta
+        </button>
+      </form>
     </main>
   );
 }

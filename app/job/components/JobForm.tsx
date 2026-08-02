@@ -1,18 +1,25 @@
-import { createJob } from "@/app/actions/jobs";
+import { createJob, updateJob  } from "@/app/actions/jobs";
+import { JobPost } from "@/app/generated/prisma/client";
 
-export default function JobForm() {
+interface JobFormProps {
+    job?: JobPost;
+}
+export default function JobForm({ job }: JobFormProps) {
+    const formAction = job
+    ? updateJob.bind(null, job.id)
+    : createJob;
     return (
-        <form action={createJob}>
+        <form action={formAction}>
             <h2>Información principal</h2>
             <label htmlFor="title">Título del trabajo</label>
-            <input type="text" id="title" name="title" required />
+            <input type="text" id="title" name="title" defaultValue={job?.title} required />
 
             <label htmlFor="description">Descripción del trabajo</label>
-            <textarea id="description" name="description" required></textarea>
+            <textarea id="description" name="description" defaultValue={job?.description} required></textarea>
 
             <h2>Detalles</h2>
             <label htmlFor="category">Categoría</label>
-            <select id="category" name="category" required>
+            <select id="category" name="category" defaultValue={job?.category} required>
                 <option value="">Seleccionar categoría</option>
                 <option value="PROGRAMMING">Programación</option>
                 <option value="CLEANING">Limpieza</option>
@@ -27,12 +34,12 @@ export default function JobForm() {
 
             <h2>Contacto</h2>
             <label htmlFor="location">Ubicación</label>
-            <input type="text" id="location" name="location" required />
+            <input type="text" id="location" name="location" defaultValue={job?.location} required />
 
             <label htmlFor="contactInfo">Información de contacto</label>
-            <textarea id="contactInfo" name="contactInfo" required></textarea>
+            <textarea id="contactInfo" name="contactInfo" defaultValue={job?.contactInfo} required></textarea>
 
-            <button type="submit">Publicar oferta</button>
+            <button type="submit" >{job ? "Guardar cambios" : "Publicar oferta"}</button>
         </form>
     );
 }
