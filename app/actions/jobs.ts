@@ -8,9 +8,16 @@ import { createJobPost, deleteJobPost } from "@/lib/job-posts";
 
 //IMPORTS PARA UPDTE JOBS
 import { updateJobPost } from "@/lib/job-posts";
+import { getCurrentUser } from "@/lib/auth";
 
 
 export async function createJob(formData: FormData) {
+
+    const user = await getCurrentUser();
+
+    if (!user) {
+        redirect("/login");
+    }
     const data: Prisma.JobPostCreateInput = {
         title: String(formData.get("title")),
         description: String(formData.get("description")),

@@ -1,8 +1,10 @@
+import { getCurrentUser } from "@/lib/auth";
 import JobBoard from "./components/JobBoard";
 import SearchBar from "./components/SearchBar";
 import Filters from "./components/Filters";
 import type { Category } from "@/app/generated/prisma/client";
 import { getJobPosts, searchAndFilterJobPosts } from "@/lib/job-posts";
+
 
 interface DashboardPageProps {
     searchParams: Promise<{
@@ -20,7 +22,9 @@ export default async function DashboardPage({ searchParams, }: DashboardPageProp
         ? await searchAndFilterJobPosts(search, category as Category)
         : await getJobPosts();
 
+    const user = await getCurrentUser();
 
+    console.log(user);
     return (
         <main>
             <h1>Tablón de ofertas</h1>

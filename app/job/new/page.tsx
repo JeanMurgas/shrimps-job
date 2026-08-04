@@ -1,7 +1,9 @@
-
 import JobForm from "../components/JobForm";
+import { requireAuth } from "@/lib/auth";
 
 export default async function NewJobPage() {
+
+    const user = await requireAuth();
 
     return (
         <main>
