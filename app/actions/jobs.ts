@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { Prisma } from "@/app/generated/prisma/client";
-import { createJobPost, deleteJobPost } from "@/lib/job-posts";
+import { createJobPost, deleteJobPost, getJobPostById } from "@/lib/job-posts";
 
 //IMPORTS PARA UPDTE JOBS
 import { updateJobPost } from "@/lib/job-posts";
@@ -28,7 +28,7 @@ export async function createJob(formData: FormData) {
 
         user: {
             connect: {
-                id: 1,
+                id: user.id,
             },
         },
     };
@@ -40,6 +40,18 @@ export async function createJob(formData: FormData) {
 }
 
 export async function updateJob(id: number, formData: FormData) {
+    const user = await getCurrentUser();
+
+    if (!user) {
+        redirect("/login");
+    }
+
+    const job = await getJobPostById(id);
+
+    if (!job || job.userId !== user.id) {
+        redirect("/dashboard");
+    }
+
     const data: Prisma.JobPostUpdateInput = {
         title: String(formData.get("title")),
         description: String(formData.get("description")),
@@ -47,24 +59,31 @@ export async function updateJob(id: number, formData: FormData) {
         price: Number(formData.get("price")),
         location: String(formData.get("location")),
         contactInfo: String(formData.get("contactInfo")),
-
-        user: {
-            connect: {
-                id: 1,
-            },
-        },
     };
 
     await updateJobPost(id, data);
 
     revalidatePath("/dashboard");
-    redirect("/dashboard");
+    revalidatePath(`/job/${id}`);
+
+    redirect(`/job/${id}`);
 }
 
 export async function deleteJob(id: number) {
+    const user = await getCurrentUser();
+
+    if (!user) {
+        redirect("/login");
+    }
+
+    const job = await getJobPostById(id);
+
+    if (!job || job.userId !== user.id) {
+        redirect("/dashboard");
+    }
+
     await deleteJobPost(id);
 
     revalidatePath("/dashboard");
-
     redirect("/dashboard");
 }

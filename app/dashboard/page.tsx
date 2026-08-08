@@ -27,26 +27,30 @@ export default async function DashboardPage({ searchParams, }: DashboardPageProp
     console.log(user);
     return (
         <main>
-            <h1>Tablón de ofertas</h1>
-            <p>Trabajos disponibles cerca de la comunidad.</p>
+            <section className="mb-8">
+                <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                    Encuentra trabajo cerca de ti
+                </h1>
 
-            <form
-                action="/dashboard"
-                className="mb-6 flex flex-col gap-3 sm:flex-row"
-            >
-                <SearchBar />
+                <p className="mt-2 max-w-2xl text-slate-600">
+                    Explora oportunidades publicadas por personas de tu comunidad.
+                </p>
+            </section>
 
-                <Filters />
-
-                <button
-                    type="submit"
-                    className="rounded-xl border px-4 py-2"
-                >
-                    Buscar
-                </button>
-            </form>
+            <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="flex flex-col gap-3 sm:flex-row">
+                    <SearchBar />
+                    <Filters />
+                </div>
+            </section>
 
             <section>
+                <div className="mb-4 flex items-center justify-between">
+                    <h2 className="text-xl font-semibold">
+                        Ofertas disponibles
+                    </h2>
+                </div>
+
                 <JobBoard jobs={jobs} />
             </section>
         </main>

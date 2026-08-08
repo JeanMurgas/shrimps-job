@@ -1,6 +1,7 @@
-import { notFound } from "next/navigation";
-import { getJobPostById } from "@/lib/job-posts";
 import JobForm from "@/app/job/components/JobForm";
+import { getJobPostById } from "@/lib/job-posts";
+import { requireAuth } from "@/lib/auth";
+import { notFound, redirect } from "next/navigation";
 
 interface EditJobPageProps {
     params: Promise<{
@@ -11,6 +12,8 @@ interface EditJobPageProps {
 export default async function EditJobPage({
     params,
 }: EditJobPageProps) {
+    const user = await requireAuth();
+
     const { id } = await params;
 
     const job = await getJobPostById(Number(id));
@@ -19,11 +22,25 @@ export default async function EditJobPage({
         notFound();
     }
 
-    return (
-        <main>
-            <h1>Editar oferta</h1>
+    if (job.userId !== user.id) {
+        redirect("/dashboard");
+    }
 
-            <JobForm job={job} />
+    return (
+        <main className="mx-auto max-w-2xl px-6 py-10">
+            <div className="mb-6">
+                <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+                    Editar oferta
+                </h1>
+
+                <p className="mt-2 text-sm text-slate-600">
+                    Actualiza la información de tu oferta de trabajo.
+                </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+                <JobForm job={job} />
+            </div>
         </main>
     );
 }
